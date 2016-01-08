@@ -18,18 +18,31 @@ var heart = {
 	bottom : 500,
 	middle : MIDDLE.x,
 	fixX : 20,
-	ctrlOffsetX : MIDDLE.x,
-	ctrlY : 150,
-	getLeftCtrl : function() {
+	ctrlOffsetX : MIDDLE.x / 4 * 3,
+	ctrlTopY : 80,
+	ctrlBottomY : 300,
+	getTopLeftCtrl : function() {
 		return {
 			x : this.middle - this.ctrlOffsetX,
-			y : this.ctrlY
+			y : this.ctrlTopY
 		};
 	},
-	getRightCtrl : function() {
+	getBottomLeftCtrl : function() {
+		return {
+			x : this.middle - this.ctrlOffsetX,
+			y : this.ctrlBottomY
+		};
+	},
+	getTopRightCtrl : function() {
 		return {
 			x : this.middle + this.ctrlOffsetX,
-			y : this.ctrlY
+			y : this.ctrlTopY
+		};
+	},
+	getBottomRightCtrl : function() {
+		return {
+			x : this.middle + this.ctrlOffsetX,
+			y : this.ctrlBottomY
 		};
 	},
 	getBottomPoint : function() {
@@ -43,41 +56,28 @@ var heart = {
 			x : this.middle,
 			y : this.top
 		};
-	},
-	getCorrectTopPoint : function(positive) {
-		var topPoint = this.getTopPoint();
-		var timer = positive ? 1 : -1;
-		var fixX = this.fixX * timer;
-		topPoint.x += fixX;
-		return topPoint;
-	},
-	
-	getCorrectBottomPoint : function(positive) {
-		var bottomPoint = this.getBottomPoint();
-		var timer = positive ? 1 : -1;
-		var fixX = this.fixX * timer;
-		bottomPoint.x += fixX;
-		return bottomPoint;
 	}
 };
 
-var style = {lineWidth : 10, strokeStyle : "#EE799F", deltaT : 20};
+var style = {lineWidth : 5, strokeStyle : "#EE799F", deltaT : 20};
 
 var heartLeft = new Bezier(
 		heart.getBottomPoint(), 
-		heart.getLeftCtrl(), 
+		heart.getBottomLeftCtrl(),
+		heart.getTopLeftCtrl(),  
 		heart.getTopPoint());
 
 var heartRight = new Bezier(
 	heart.getTopPoint(), 
-	heart.getRightCtrl(), 
+	heart.getTopRightCtrl(), 
+	heart.getBottomRightCtrl(),
 	heart.getBottomPoint());
 
 var bottomLineLeft = new Line({x : 0, y : heart.bottom}, {x : heart.middle, y : heart.bottom});
 var bottomLineRight = new Line({x : heart.middle, y : heart.bottom}, {x : canvas.width, y : heart.bottom});
 
-bottomLineLeft.animate(style);
+//bottomLineLeft.animate(style);
 setTimeout(heartLeft.animate.bind(heartLeft, style), 1100);
 setTimeout(heartRight.animate.bind(heartRight, style), 2200);
-setTimeout(bottomLineRight.animate.bind(bottomLineRight, style), 3300);
+//setTimeout(bottomLineRight.animate.bind(bottomLineRight, style), 3300);
 
